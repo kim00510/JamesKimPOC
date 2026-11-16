@@ -1,0 +1,85 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Food Products</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 30px;
+    }
+
+    table {
+      border-collapse: collapse;
+      width: 60%;
+    }
+
+    th, td {
+      border: 1px solid #999;
+      padding: 10px;
+      text-align: left;
+    }
+
+    th {
+      background-color: #eeeeee;
+    }
+  </style>
+</head>
+<body>
+  <h1>Food Products</h1>
+  <p>Available food items and prices</p>
+  <p><small>Disclaimer: This application is for demonstrating a student's web development skills only.</small></p>
+
+  <table>
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Food Name</th>
+        <th>Price</th>
+      </tr>
+    </thead>
+    <tbody id="foodTable"></tbody>
+  </table>
+
+  <script>
+    // Fetch all food items from the backend API.
+    async function loadFoods() {
+      try {
+        const response = await fetch("/foods");
+
+        if (!response.ok) {
+          throw new Error("Failed to fetch food items.");
+        }
+
+        const foods = await response.json();
+        const table = document.getElementById("foodTable");
+
+        // Display each food item in the table.
+        foods.forEach((food) => {
+          const row = document.createElement("tr");
+
+          const idCell = document.createElement("td");
+          idCell.textContent = food.id;
+
+          const nameCell = document.createElement("td");
+          nameCell.textContent = food.name;
+
+          const priceCell = document.createElement("td");
+          priceCell.textContent = `$${food.price.toFixed(2)}`;
+
+          row.append(idCell, nameCell, priceCell);
+          table.appendChild(row);
+        });
+
+        console.log("Food items loaded successfully.");
+      } catch (error) {
+        console.error("Error loading food items:", error);
+      }
+    }
+
+    loadFoods();
+  </script>
+</body>
+</html>
